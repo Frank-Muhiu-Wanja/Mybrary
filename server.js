@@ -13,7 +13,12 @@ app.use(expressLayouts);
 app.use(express.static("public"));
 
 const mongoose = require("mongoose");
-mongoose.connect(process.env.DATABASE_URL);
+mongoose
+  .connect(process.env.DATABASE_URL, {
+    family: 4, // This tells Mongoose to use IPv4 instead of IPv6
+  })
+  .then(() => console.log("Connected to Mongoose!"))
+  .catch((err) => console.error("Error connecting to Mongoose:", err));
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Mongoose!"));
